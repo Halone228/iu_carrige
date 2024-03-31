@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "iu-carrige"
+version = "0.1.0"
+description = ""
+authors = ["halone <haloneprog@gmail.com>"]
+readme = "README.md"
+packages = [{include = "iu_carrige"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.110.0"
+sqlalchemy = "^2.0.29"
+asyncpg = "^0.29.0"
+psycopg2-binary = "^2.9.9"
+blinker = "^1.7.0"
+loguru = "^0.7.2"
+iu-datamodels = {git = "https://github.com/Halone228/iu_datamodels"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
