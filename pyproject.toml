@@ -15,6 +15,7 @@ psycopg2-binary = "^2.9.9"
 blinker = "^1.7.0"
 loguru = "^0.7.2"
 iu-datamodels = {git = "https://github.com/Halone228/iu_datamodels"}
+aioboto3 = "^12.3.0"
 
 
 [build-system]
