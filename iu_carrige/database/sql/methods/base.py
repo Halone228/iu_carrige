@@ -1,9 +1,8 @@
-from iu_carrige.database.models import *  # noqa
+from iu_carrige.database.sql.models import *  # noqa
 from sqlalchemy.ext.asyncio import AsyncSession
-from abc import ABC, abstractmethod
+from abc import ABC
 from sqlalchemy import select, update, Executable, util  # noqa
 from sqlalchemy.dialects.postgresql import insert  # noqa
-from functools import wraps
 
 
 class BaseDatabaseDep(ABC):

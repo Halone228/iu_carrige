@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "iu_carrige"}]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 fastapi = "^0.110.0"
 sqlalchemy = "^2.0.29"
 asyncpg = "^0.29.0"
@@ -16,6 +16,7 @@ blinker = "^1.7.0"
 loguru = "^0.7.2"
 iu-datamodels = {git = "https://github.com/Halone228/iu_datamodels"}
 aioboto3 = "^12.3.0"
+redis = "^5.0.3"
 
 
 [build-system]

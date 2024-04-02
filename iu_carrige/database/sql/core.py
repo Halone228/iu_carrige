@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from os import getenv
-from . import models
+from iu_carrige.database.sql import models
 from blinker import signal
 from loguru import logger
 
