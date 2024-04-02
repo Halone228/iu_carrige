@@ -19,3 +19,8 @@ async def check_hashes(redis_helper: Annotated[RedisHelper, Depends(get_redis_he
 @core_route.post('/new_minerals')
 async def new_minerals(): 
     pass
+
+
+__all__ = [
+    'core_route'
+]
