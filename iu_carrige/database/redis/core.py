@@ -1,8 +1,9 @@
 from redis.asyncio import Redis
 from os import getenv
 
-
-redis_client = Redis.from_url(getenv("REDIS_CONNECT_URL"))
+url = getenv("REDIS_CONNECT_URL")
+url = '' if not url else url
+redis_client = Redis.from_url(url)
 
 
 __all__ = [
