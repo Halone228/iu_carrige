@@ -18,10 +18,10 @@ class RedisHelper:
             *(self.push_hash(hash) for hash in hashes)
         )
 
-    async def check_hash(self, hash: str) -> bool:
-       return await self.client.hexists(HASHES_NAME, hash) 
+    async def check_hash(self, _hash: str) -> bool:
+        return await self.client.hexists(HASHES_NAME, _hash)
     
-    async def check_bulk_hash(self, hashes: str) -> list[bool]:
+    async def check_bulk_hash(self, hashes: list[str]) -> tuple[bool]:
         return await gather(
             *(self.check_hash(hash) for hash in hashes)
         )
