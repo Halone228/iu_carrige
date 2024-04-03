@@ -10,12 +10,12 @@ class RedisHelper:
     def __init__(self, client: Redis):
         self.client = client
 
-    async def push_hash(self, hash: str):
-        await self.client.hset(HASHES_NAME, hash, 0)
+    async def push_hash(self, _hash: str):
+        await self.client.hset(HASHES_NAME, _hash, 0)
 
-    async def push_bulk_hash(self, hashes: str):
+    async def push_bulk_hash(self, hashes: list[str]):
         await gather(
-            *(self.push_hash(hash) for hash in hashes)
+            *(self.push_hash(_hash) for _hash in hashes)
         )
 
     async def check_hash(self, _hash: str) -> bool:

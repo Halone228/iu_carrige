@@ -7,5 +7,6 @@ async def get_redis_helper():
 
 
 __all__ = [
-    'get_redis_helper'
+    'get_redis_helper',
+    'RedisHelper'
 ] 
