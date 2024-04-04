@@ -1,6 +1,6 @@
-FROM python:3.12.2-slim
+FROM python:3.12-slim
 WORKDIR /app
-RUN pip install poetry && poetry config virtualenvs.create false
 COPY pyproject.toml .
+RUN pip install poetry && poetry config virtualenvs.create false
 RUN poetry install
-
+ENTRYPOINT ["poetry", "run", "dev"]

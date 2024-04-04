@@ -5,6 +5,7 @@ services:
     depends_on:
       - redis
       - postgres
+    entrypoint: "poetry run test"
   redis:
     image: "redis:latest"
     ports:
