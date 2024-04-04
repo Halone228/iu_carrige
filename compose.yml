@@ -1,11 +1,23 @@
 version: "3"
+name: iu
 services:
   carrige:
-    build: .
+    build:
+      dockerfile: Dockerfile
+      context: "."
+      args:
+        GIT_PAT: ${GIT_PAT}
+        GIT_USERNAME: ${GIT_USERNAME}
     depends_on:
       - redis
       - postgres
-    entrypoint: "poetry run test"
+    env_file:
+      - .env
+    entrypoint: "poetry run dev"
+    volumes:
+      - .:/app
+
+
   redis:
     image: "redis:latest"
     ports:
@@ -14,3 +26,16 @@ services:
     image: "postgres:latest"
     ports: 
       - "5432:5432"
+    env_file:
+      - .env
+  s3_localstack:
+    image: "localstack/localstack:s3-latest"
+    ports:
+      - "4566:4566"            # LocalStack Gateway
+    environment:
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+

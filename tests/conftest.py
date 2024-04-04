@@ -1,5 +1,5 @@
 from asgi_lifespan import LifespanManager
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from iu_carrige.api.core import app
 from pytest import fixture
 from uuid import uuid4
@@ -8,7 +8,7 @@ from uuid import uuid4
 @fixture(scope='session')
 async def client():
     async with LifespanManager(app) as manager:
-        async with AsyncClient(base_url='http://localhost:8000', app=manager.app) as client:
+        async with AsyncClient(base_url='http://localhost:8000', transport=ASGITransport(app=manager.app)) as client:
             yield client
 
 

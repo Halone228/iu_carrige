@@ -5,8 +5,8 @@ from blinker import signal
 from loguru import logger
 
 
-USER = getenv("POSTGRES_USER")
-PASSWORD = getenv("POSTGRES_PASSWORD")
+USER = getenv("POSTGRES_USER") or None
+PASSWORD = getenv("POSTGRES_PASSWORD") or None
 HOST = getenv("POSTGRES_HOST")
 PORT = getenv("POSTGRES_PORT")
 DB = getenv("POSTGRES_DB")

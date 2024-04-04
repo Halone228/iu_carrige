@@ -11,7 +11,7 @@ class RedisHelper:
         self.client = client
 
     async def push_hash(self, _hash: str):
-        await self.client.hset(HASHES_NAME, _hash, 0)
+        await self.client.hset(HASHES_NAME, _hash, '00')
 
     async def push_bulk_hash(self, hashes: list[str]):
         await gather(
@@ -23,7 +23,7 @@ class RedisHelper:
     
     async def check_bulk_hash(self, hashes: list[str]) -> tuple[bool]:
         return await gather(
-            *(self.check_hash(hash) for hash in hashes)
+            *(self.check_hash(_hash) for _hash in hashes)
         )
 
 

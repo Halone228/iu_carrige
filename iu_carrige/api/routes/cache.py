@@ -27,7 +27,7 @@ async def push_hashes(
 
 @cache_router.get('/check_hashes')
 async def check_hashes(redis_helper: Annotated[RedisHelper, Depends(get_redis_helper)],
-                       hashes: list[str] | None = None) -> list[bool]:
+                       hashes: Annotated[list[str], Query()]) -> list[bool]:
     if hashes is None:
         raise HTTPException(
             status_code=400,

@@ -1,9 +1,16 @@
 from redis.asyncio import Redis
 from os import getenv
 
-url = getenv("REDIS_CONNECT_URL")
-url = '' if not url else url
-redis_client = Redis.from_url(url)
+REDIS_HOST = getenv('REDIS_HOST', None)
+REDIS_PORT = int(getenv('REDIS_PORT', 0))
+REDIS_USER = getenv('REDIS_USER', None) or None
+REDIS_PASSWORD = getenv('REDIS_PASSWORD', None) or None
+redis_client = Redis(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+    username=REDIS_USER,
+    password=REDIS_PASSWORD
+)
 
 
 __all__ = [
