@@ -23,6 +23,8 @@ pytest-dependency = "^0.6.0"
 pytest-asyncio = "^0.23.6"
 iu-datamodels = {git = "https://github.com/Halone228/iu_datamodels"}
 uvicorn = "^0.29.0"
+python-multipart = "^0.0.9"
+types-aioboto3-lite = {extras = ["essential"], version = "^12.3.0"}
 
 [build-system]
 requires = ["poetry-core"]

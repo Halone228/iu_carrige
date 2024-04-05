@@ -14,7 +14,7 @@ BUCKET_NAME = getenv("BUCKET_NAME") or "default"
 
 
 @asynccontextmanager
-async def file_storage_dep():
+async def file_storage_context():
     session = Session()
     async with session.client(
         's3',
@@ -26,14 +26,9 @@ async def file_storage_dep():
         yield s3_s
 
 
-async def init_s3(*args, **kwargs):
-    async with file_storage_dep() as s3_s:
-        try:
-            await s3_s.create_bucket(Bucket=BUCKET_NAME)
-        except Exception as e:
-            logger.exception(e)
-
-startup_event.connect(init_s3, ANY)
+async def file_storage_dep():
+    async with file_storage_context() as client:
+        yield client
 
 __all__ = [
     'file_storage_dep'

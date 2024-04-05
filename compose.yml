@@ -15,6 +15,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - s3_localstack
     env_file:
       - .env
     entrypoint: "poetry run dev"
@@ -46,6 +47,7 @@ services:
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./tests/ready/:/etc/localstack/init/ready.d/"
     networks:
       - iu
 

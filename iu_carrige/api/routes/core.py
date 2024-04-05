@@ -1,14 +1,50 @@
 from asyncio import gather
+import loguru
 from .include import *
 from iu_carrige.utils import deserialize
 from base64 import b64decode
 from iu_datamodels import MineralAndSource
 from iu_carrige.events import new_mineral_event
+from iu_carrige.deps import file_storage_dep
+from types_aiobotocore_s3 import S3Client
+from uuid import uuid4
+from os import getenv
+from pydantic import BaseModel
 
 core_route = APIRouter(
     tags=['Minerals', 'Attachments']
 )
-        
+
+
+BUCKET_NAME = getenv('BUCKET_NAME')
+
+
+class AddedAttachments(BaseModel):
+    created_ids: list[str]
+
+
+@core_route.post(
+    '/add_attachments'
+)
+async def add_attachments(
+    s3_client: Annotated[S3Client, Depends(file_storage_dep)],
+    files: list[UploadFile]
+) -> AddedAttachments:
+    loguru.logger.info(files)
+    files_id = zip(files, (uuid4().hex for _ in range(len(files))))
+    await gather(
+        *(
+            s3_client.upload_fileobj(
+                file.file,
+                BUCKET_NAME,
+                _id
+            )
+            for file, _id in files_id
+        )
+    )
+    return AddedAttachments(
+        created_ids=[i[1] for i in files_id]
+    )
 
 @core_route.post('/new_minerals')
 async def new_minerals(

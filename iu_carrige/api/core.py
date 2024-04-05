@@ -1,3 +1,5 @@
+from os import getenv
+
 from fastapi import FastAPI
 from iu_carrige.events import startup_event
 from contextlib import asynccontextmanager
@@ -10,5 +12,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-	lifespan=lifespan
+	lifespan=lifespan,
+	debug=bool(getenv("DEBUG", None))
 )
