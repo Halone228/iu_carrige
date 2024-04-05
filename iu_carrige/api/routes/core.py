@@ -20,7 +20,7 @@ BUCKET_NAME = getenv('BUCKET_NAME')
 
 
 class AddedAttachments(BaseModel):
-    created_ids: list[str]
+    created_ids: dict[str, str]
 
 
 @core_route.post(
@@ -31,20 +31,27 @@ async def add_attachments(
     files: list[UploadFile]
 ) -> AddedAttachments:
     loguru.logger.info(files)
-    files_id = zip(files, (uuid4().hex for _ in range(len(files))))
+    files_id = list(zip(files, (uuid4().hex for _ in range(len(files)))))
     await gather(
         *(
             s3_client.upload_fileobj(
                 file.file,
                 BUCKET_NAME,
-                _id
+                _id,
+                {
+                    'ContentType': file.headers['content-type'],
+                    'ContentDisposition': file.headers['content-disposition']
+                }
             )
             for file, _id in files_id
         )
     )
     return AddedAttachments(
-        created_ids=[i[1] for i in files_id]
+        created_ids={
+            file.filename: i for file, i in files_id
+        }
     )
+
 
 @core_route.post('/new_minerals')
 async def new_minerals(

@@ -8,4 +8,4 @@ s3_client = boto3.client(
     aws_secret_access_key=getenv("AWS_SECRET_ACCESS_KEY", 'test')
 )
 
-s3_client.create_bucket(Bucket=getenv("BUCKET_NAME", "default"))
+s3_client.create_bucket(Bucket=getenv("BUCKET_NAME", "test"))
