@@ -42,3 +42,8 @@ class MineralDep(BaseDatabaseDep):
             )
         ]
         await gather(*coros)
+
+
+__all__ = [
+    'MineralDep'
+]

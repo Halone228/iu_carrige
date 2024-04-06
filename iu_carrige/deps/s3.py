@@ -1,10 +1,7 @@
-from .base import BaseDep
 from aioboto3 import Session
 from os import getenv
 from contextlib import asynccontextmanager
-from loguru import logger
-from blinker import ANY
-from iu_carrige.events import startup_event
+
 
 AWS_DEFAULT_REGION = getenv("AWS_DEFAULT_REGION") or None
 AWS_SECRET_ACCESS_KEY = getenv("AWS_SECRET_ACCESS_KEY") or None

@@ -3,7 +3,7 @@ import loguru
 from .include import *
 from iu_carrige.utils import deserialize
 from base64 import b64decode
-from iu_datamodels import MineralAndSource
+from iu_datamodels import MineralAndAttachments
 from iu_carrige.events import new_mineral_event
 from iu_carrige.deps import file_storage_dep
 from types_aiobotocore_s3 import S3Client
@@ -62,7 +62,7 @@ async def new_minerals(
     data = deserialize(serialization_type, binary)
     await gather(
         *(
-            new_mineral_event.send_async(MineralAndSource.model_validate(i, from_attributes=True)) for i in data
+            new_mineral_event.send_async(MineralAndAttachments.model_validate(i, from_attributes=True)) for i in data
         )
     )
 

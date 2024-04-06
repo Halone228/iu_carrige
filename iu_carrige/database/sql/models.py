@@ -19,7 +19,10 @@ class Source(Base):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     vein_id: Mapped[int] = ForeignKey("vein_table.id")
     slug: Mapped[str]
-    metadata: Mapped[dict] = mapped_column(JSON())
+    _metadata: Mapped[dict] = mapped_column(
+        JSON(),
+        name='metadata'
+    )
 
 
 class Mineral(Base):
