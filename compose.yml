@@ -1,0 +1,63 @@
+version: "3"
+name: iu
+networks:
+  iu:
+    driver: "bridge"
+services:
+  carrige:
+    build:
+      dockerfile: Dockerfile
+      context: "."
+      args:
+        GIT_PAT: ${GIT_PAT}
+        GIT_USERNAME: ${GIT_USERNAME}
+    links:
+      - s3_localstack
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - postgres
+      - s3_localstack
+    env_file:
+      - .env
+    entrypoint: "poetry run ${RUN_TASK:-dev}"
+    volumes:
+      - .:/app
+      - ./output:/app/output
+    networks:
+      - iu
+
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - iu
+    env_file:
+      - .env
+
+  postgres:
+    image: "postgres:latest"
+    ports: 
+      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - iu
+
+  s3_localstack:
+    hostname: s3local
+    image: "localstack/localstack:s3-latest"
+    ports:
+      - "4566:4566"            # LocalStack Gateway
+    environment:
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./tests/ready/:/etc/localstack/init/ready.d/"
+    networks:
+      - iu
+

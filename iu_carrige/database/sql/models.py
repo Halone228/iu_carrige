@@ -17,9 +17,11 @@ class Vein(Base):
 class Source(Base):
     __tablename__ = "source_table"
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    vein_id: Mapped[int] = ForeignKey("vein_table.id")
+    vein_id: Mapped[int] = mapped_column(ForeignKey("vein_table.id"))
     slug: Mapped[str]
-    metadata: Mapped[dict] = mapped_column(JSON())
+    source_metadata: Mapped[dict] = mapped_column(
+        JSON()
+    )
 
 
 class Mineral(Base):
@@ -47,7 +49,7 @@ class MineralTag(Base):
 
 class MineralAttachment(Base):
     __tablename__ = "mineral_attachment_table"
-    attachment_id: Mapped[int] = mapped_column(primary_key=True)
+    attachment_id: Mapped[str] = mapped_column(primary_key=True)
     mineral_id: Mapped[int] = mapped_column(
         ForeignKey("mineral_table.id"), primary_key=True
     )
