@@ -5,10 +5,14 @@ from os import putenv, environ
 
 def start_test():
 	import iu_datamodels
-	main(['tests'])
+	main(['tests', '-s', '-v'])
 
 
 def start_dev():
 	from subprocess import run
 	putenv('DEBUG', "YES")
-	run(["uvicorn", "main:app", "--host=0.0.0.0",  "--port=8000", "--reload"], env=environ)
+	run(["uvicorn", "main:app", "--host=0.0.0.0", "--port=8000", "--reload"], env=environ)
+
+
+if __name__ == '__main__':
+	start_dev()

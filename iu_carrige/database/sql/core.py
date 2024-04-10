@@ -13,7 +13,7 @@ DB = getenv("POSTGRES_DB")
 
 uri = f"{USER}:{PASSWORD}@{HOST}:{PORT}/{DB}"
 
-engine = create_async_engine(f"postgresql+asyncpg://{uri}")
+engine = create_async_engine(f"postgresql+psycopg_async://{uri}")
 asessionmaker = async_sessionmaker(bind=engine)
 
 

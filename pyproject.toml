@@ -1,17 +1,16 @@
 [tool.poetry]
 name = "iu-carrige"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["halone <haloneprog@gmail.com>"]
 readme = "README.md"
 packages = [{include = "iu_carrige"}]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
 fastapi = "^0.110.0"
 sqlalchemy = "^2.0.29"
-asyncpg = "^0.29.0"
-psycopg2-binary = "^2.9.9"
+#psycopg2-binary = "^2.9.9"
 blinker = "^1.7.0"
 loguru = "^0.7.2"
 aioboto3 = "^12.3.0"
@@ -25,6 +24,10 @@ iu-datamodels = {git = "https://github.com/Halone228/iu_datamodels"}
 uvicorn = "^0.29.0"
 python-multipart = "^0.0.9"
 types-aioboto3-lite = {extras = ["essential"], version = "^12.3.0"}
+aiocache = "^0.12.2"
+psycopg = "^3.1.18"
+faker = "^24.7.1"
+polyfactory = "^2.15.0"
 
 [build-system]
 requires = ["poetry-core"]

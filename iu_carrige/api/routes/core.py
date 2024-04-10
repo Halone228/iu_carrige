@@ -3,18 +3,19 @@ import loguru
 from .include import *
 from iu_carrige.utils import deserialize
 from base64 import b64decode
-from iu_datamodels import MineralAndAttachments
+from iu_datamodels import MineralAndAttachmentsShort
 from iu_carrige.events import new_mineral_event
 from iu_carrige.deps import file_storage_dep
 from types_aiobotocore_s3 import S3Client
 from uuid import uuid4
 from os import getenv
 from pydantic import BaseModel
+from pydantic import TypeAdapter
 
-core_route = APIRouter(
+core_router = APIRouter(
     tags=['Minerals', 'Attachments']
 )
-
+new_mineral_adapter = TypeAdapter(list[MineralAndAttachmentsShort])
 
 BUCKET_NAME = getenv('BUCKET_NAME')
 
@@ -23,7 +24,7 @@ class AddedAttachments(BaseModel):
     created_ids: dict[str, str]
 
 
-@core_route.post(
+@core_router.post(
     '/add_attachments'
 )
 async def add_attachments(
@@ -53,20 +54,18 @@ async def add_attachments(
     )
 
 
-@core_route.post('/new_minerals')
+@core_router.post('/new_minerals')
 async def new_minerals(
     serialization_type: Annotated[str, Body()],
     binary_minerals: Annotated[str, Body()]
 ): 
     binary = b64decode(binary_minerals)
     data = deserialize(serialization_type, binary)
-    await gather(
-        *(
-            new_mineral_event.send_async(MineralAndAttachments.model_validate(i, from_attributes=True)) for i in data
-        )
+    minerals = new_mineral_adapter.validate_python(data)
+    await new_mineral_event.send_async(
+        minerals
     )
 
-
 __all__ = [
-    'core_route'
+    'core_router'
 ]

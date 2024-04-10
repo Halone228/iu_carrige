@@ -1,34 +1,36 @@
 from .include import *
-from iu_datamodels import MineralAndAttachments
+from iu_datamodels import MineralAndAttachmentsShort
+from loguru import logger
 
 
 class MineralDep(BaseDatabaseDep):
-    @override
     async def close(self):
         await self.session.close()
 
-    async def new_mineral_bulk(self, minerals: list[MineralAndAttachments]):
+    async def new_mineral_bulk(self, minerals: list[MineralAndAttachmentsShort]):
         stmt = insert(Mineral).returning(Mineral.id)
         result = await self.session.execute(
-            stmt, [mineral.model_dump() for mineral in minerals]
+            stmt, tuple({
+                'source_id': mineral.source_id,
+                'html_text': mineral.html_text,
+                'created_at': mineral.created_at
+            } for mineral in minerals)
         )
+        await self.session.commit()
 
-        def apply(mineral_and_raw: tuple[MineralAndAttachments, int]):
-            _mineral = mineral_and_raw[0]
-            _mineral.id = mineral_and_raw[1]
-            return _mineral
+        logger.debug(minerals)
 
-        minerals = tuple(map(apply, zip(minerals, result)))
+        minerals = tuple(zip(minerals, result.scalars()))
         data_attachments = list(
             chain(
-                *(({'mineral_id': mineral.id, 'attachment_id': a_id} for a_id in mineral.attachments)
-                  for mineral in minerals)
+                *(({'mineral_id': mineral_id, 'attachment_id': a_id} for a_id in mineral.attachments)
+                  for mineral, mineral_id in minerals)
             )
         )
         data_tags = list(
             chain(
-                *(({'mineral_id': mineral.id, 'tag_id': t_id} for t_id in mineral.tags)
-                  for mineral in minerals)
+                *(({'mineral_id': mineral_id, 'tag_id': t_id} for t_id in mineral.tags)
+                  for mineral, mineral_id in minerals)
             )
         )
         coros = [
@@ -42,6 +44,7 @@ class MineralDep(BaseDatabaseDep):
             )
         ]
         await gather(*coros)
+        await self.session.commit()
 
 
 __all__ = [

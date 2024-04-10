@@ -21,9 +21,10 @@ services:
       - s3_localstack
     env_file:
       - .env
-    entrypoint: "poetry run dev"
+    entrypoint: "poetry run ${RUN_TASK:-dev}"
     volumes:
       - .:/app
+      - ./output:/app/output
     networks:
       - iu
 
@@ -32,6 +33,11 @@ services:
     image: "redis:latest"
     ports:
       - "6379:6379"
+    networks:
+      - iu
+    env_file:
+      - .env
+
   postgres:
     image: "postgres:latest"
     ports: 
