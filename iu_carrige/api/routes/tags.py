@@ -41,7 +41,7 @@ async def create_tag(
     }
 
 
-@tags_router .get(
+@tags_router.get(
     '/search_tags'
 )
 async def search_tags(
@@ -51,3 +51,13 @@ async def search_tags(
     query: str = None
 ) -> list[Tag]:
     return await tag_db.get_tags(page, limit, query)
+
+
+@tags_router.get(
+    '/all_tags',
+    response_model=list[Tag]
+)
+async def get_all_tags(
+    tag_db: Annotated[TagDep, Depends(sql_helper_factory(TagDep))]
+):
+    return await tag_db.get_all_tags()

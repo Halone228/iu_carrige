@@ -6,7 +6,8 @@ class VeinDep(BaseDatabaseDep):
     async def create_vein(self, vein: VeinShort) -> int:
         stmt = insert(Vein).values(
             name=vein.name,
-            url=vein.url
+            url=vein.url,
+            slug=vein.slug
         ).returning(Vein.id)
         result = await self.session.execute(stmt)
         await self.session.commit()
@@ -27,6 +28,15 @@ class VeinDep(BaseDatabaseDep):
         )
         result = await self.session.execute(stmt)
         return VeinDataModel.model_validate(result.scalar(), from_attributes=True)
+
+    @async_raise_none
+    async def get_vein_by_slug(self, vein_slug: str) -> VeinDataModel:
+        stmt = select(Vein).where(
+            Vein.slug == vein_slug
+        )
+        result = await self.session.execute(stmt)
+        return VeinDataModel.model_validate(result.scalar(), from_attributes=True)
+
 
 
 __all__ = [

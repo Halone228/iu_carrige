@@ -12,6 +12,7 @@ class Vein(Base):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     name: Mapped[str]
     url: Mapped[str]
+    slug: Mapped[str]
 
 
 class Source(Base):

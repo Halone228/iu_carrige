@@ -11,7 +11,7 @@ def start_test():
 def start_dev():
 	from subprocess import run
 	putenv('DEBUG', "YES")
-	run(["uvicorn", "main:app", "--host=0.0.0.0", "--port=8000", "--reload"], env=environ)
+	run(["uvicorn", "main:app", "--host=0.0.0.0", "--port=9788", "--reload"], env=environ)
 
 
 if __name__ == '__main__':

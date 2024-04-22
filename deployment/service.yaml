@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: carrige
+spec:
+  selector:
+    app: carrige
+  ports:
+    - protocol: TCP
+      port: 9788
+      targetPort: 9788
+  type: NodePort
+  

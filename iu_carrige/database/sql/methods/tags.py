@@ -1,6 +1,7 @@
 from .include import *
 from iu_datamodels import TagShort, Tag as TagFull
 from aiocache import cached
+from pydantic import TypeAdapter
 
 
 class TagDep(BaseDatabaseDep):
@@ -15,6 +16,7 @@ class TagDep(BaseDatabaseDep):
 		await self.session.commit()
 		return _id
 
+	@async_raise_none
 	async def get_tags(
 		self,
 		page: int = 1,
@@ -34,6 +36,7 @@ class TagDep(BaseDatabaseDep):
 	@cached(
 		noself=True
 	)
+	@async_raise_none
 	async def get_tag_by(self, _id: int) -> TagFull:
 		stmt = select(Tag).where(Tag.id == _id)
 		data = await self.session.execute(stmt)
@@ -47,6 +50,10 @@ class TagDep(BaseDatabaseDep):
 		return [
 			TagFull.model_validate(i, from_attributes=True) for i in data.scalars()
 		]
+
+	async def get_all_tags(self) -> list[TagFull]:
+		result = await self.session.execute(select(Tag))
+		return TypeAdapter(list[TagFull]).validate_python(result.scalars())
 
 
 __all__ = [
