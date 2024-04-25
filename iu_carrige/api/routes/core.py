@@ -77,6 +77,15 @@ async def new_minerals(
     )
 
 
+@core_router.post('/new_minerals_raw')
+async def new_minerals_raw(
+    minerals: list[MineralAndAttachmentsShort]
+):
+    await new_mineral_event.send_async(
+        minerals
+    )
+
+
 @core_router.get(
     '/get_mineral'
 )

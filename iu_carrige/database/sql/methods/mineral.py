@@ -67,6 +67,11 @@ class MineralDep(BaseDatabaseDep):
         result = await self.session.execute(stmt)
         return list(result.scalars()) # noqa
 
+    async def get_all_minerals(self) -> list[MineralAndAttachments]:
+        stmt = select(Mineral)
+        result = await self.session.execute(stmt)
+        return TypeAdapter(list[MineralAndAttachments]).validate_python(result.scalars(), from_attributes=True)
+
 
 __all__ = [
     'MineralDep'

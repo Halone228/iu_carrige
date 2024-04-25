@@ -17,9 +17,19 @@ spec:
       containers:
         - name: carrige
           imagePullPolicy: IfNotPresent
-          image: iu_carrige:1.1.0
+          image: iu_carrige:1.1.1
           ports:
             - containerPort: 9788
+              name: carriage-port
           envFrom:
             - configMapRef:
                 name: core-data
+          startupProbe:
+            httpGet:
+              port: carriage-port
+              path: /healthy
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              port: carriage-port
+              path: /healthy
