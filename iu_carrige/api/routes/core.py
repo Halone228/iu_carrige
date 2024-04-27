@@ -93,7 +93,7 @@ async def get_mineral(
     mineral_id: Annotated[int, Query()],
     mineral_db: Annotated[MineralDep, Depends(sql_helper_factory(MineralDep))]
 ):
-    return mineral_db.get_mineral(mineral_id)
+    return await mineral_db.get_mineral(mineral_id)
 
 
 @core_router.get(

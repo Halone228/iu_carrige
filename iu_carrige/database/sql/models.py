@@ -11,7 +11,9 @@ class Vein(Base):
     __tablename__ = "vein_table"
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     name: Mapped[str]
-    url: Mapped[str]
+    url: Mapped[str] = mapped_column(
+        unique=True
+    )
     slug: Mapped[str]
 
 
@@ -19,7 +21,9 @@ class Source(Base):
     __tablename__ = "source_table"
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     vein_id: Mapped[int] = mapped_column(ForeignKey("vein_table.id"))
-    slug: Mapped[str]
+    slug: Mapped[str] = mapped_column(
+        unique=True
+    )
     source_metadata: Mapped[dict] = mapped_column(
         JSON()
     )
